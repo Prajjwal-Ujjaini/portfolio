@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Prajjwal Ujjaini — Flutter Web Architect</title>
+<meta name="description" content="Prajjwal Ujjaini builds multi-app Flutter Web ecosystems and the shared private packages that hold them together." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0C1310;
+    --surface:#141E19;
+    --surface-2:#1B2823;
+    --line:#25352E;
+    --teal:#1FA37B;
+    --teal-deep:#0F6E56;
+    --violet:#8B5CF6;
+    --violet-deep:#5F30BA;
+    --bone:#E9EFEB;
+    --muted:#7E9189;
+    --display:"Bricolage Grotesque", system-ui, sans-serif;
+    --body:"IBM Plex Sans", system-ui, sans-serif;
+    --mono:"JetBrains Mono", ui-monospace, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);
+    color:var(--bone);
+    font-family:var(--body);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit}
+  ::selection{background:var(--teal-deep);color:#fff}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* ---- top bar ---- */
+  .bar{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(12,19,16,.72);
+    border-bottom:1px solid var(--line);
+  }
+  .bar-in{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .sig{font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--muted)}
+  .sig b{color:var(--bone);font-weight:500}
+  .nav{display:flex;gap:22px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .nav a{text-decoration:none;transition:color .18s}
+  .nav a:hover{color:var(--teal)}
+  @media(max-width:720px){.nav{display:none}}
+
+  /* ---- hero ---- */
+  .hero{padding:92px 0 72px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;gap:40px;padding:56px 0 48px}}
+  .eyebrow{
+    font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--teal);margin-bottom:20px;display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--teal)}
+  h1{
+    font-family:var(--display);
+    font-size:clamp(40px,6.2vw,66px);
+    font-weight:800;line-height:1.02;letter-spacing:-.03em;
+  }
+  h1 .thin{font-weight:400;color:var(--muted);display:block;font-size:.52em;letter-spacing:-.01em;margin-top:16px;line-height:1.3}
+  .lede{margin-top:26px;max-width:44ch;color:#B9C7C0}
+  .cta-row{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap}
+  .btn{
+    font-family:var(--mono);font-size:13px;text-decoration:none;
+    padding:11px 18px;border-radius:999px;border:1px solid var(--line);
+    transition:border-color .18s, background .18s, color .18s;
+  }
+  .btn-p{background:var(--teal-deep);border-color:var(--teal-deep);color:#fff}
+  .btn-p:hover{background:var(--teal);border-color:var(--teal)}
+  .btn:hover{border-color:var(--teal);color:var(--teal)}
+  .btn-p:hover{color:#fff}
+
+  /* ---- pubspec card (signature) ---- */
+  .spec{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    font-family:var(--mono);
+    font-size:13px;
+    line-height:1.85;
+    overflow:hidden;
+    box-shadow:0 24px 60px -30px #000;
+  }
+  .spec-top{
+    display:flex;align-items:center;gap:8px;
+    padding:11px 14px;border-bottom:1px solid var(--line);
+    background:var(--surface-2);
+  }
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+  .dot.a{background:var(--teal-deep)}
+  .spec-name{margin-left:6px;font-size:11.5px;color:var(--muted)}
+  .spec-body{padding:18px 18px 22px;overflow-x:auto}
+  .k{color:var(--teal)}
+  .v{color:var(--bone)}
+  .s{color:var(--violet)}
+  .c{color:#4E6058}
+  .ln{display:block;white-space:pre;opacity:0;transform:translateY(4px);animation:in .38s ease forwards}
+  @keyframes in{to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){.ln{animation:none;opacity:1;transform:none}}
+
+  /* ---- sections ---- */
+  section{padding:84px 0;border-top:1px solid var(--line)}
+  @media(max-width:720px){section{padding:60px 0}}
+  .shead{display:flex;align-items:baseline;gap:16px;margin-bottom:14px}
+  .shead h2{font-family:var(--display);font-size:clamp(26px,3.4vw,36px);font-weight:600;letter-spacing:-.02em}
+  .snum{font-family:var(--mono);font-size:12px;color:var(--teal);letter-spacing:.1em}
+  .sdesc{color:var(--muted);max-width:60ch;margin-bottom:44px}
+
+  /* ---- layer graph ---- */
+  .layers{display:flex;flex-direction:column;gap:14px}
+  .layer{
+    border:1px solid var(--line);border-radius:12px;background:var(--surface);
+    padding:18px 20px;position:relative;
+  }
+  .layer-tag{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:14px;
+  }
+  .chips{display:flex;gap:10px;flex-wrap:wrap}
+  .chip{
+    font-family:var(--mono);font-size:12.5px;
+    padding:8px 13px;border-radius:8px;
+    border:1px solid var(--line);background:var(--surface-2);
+    transition:transform .16s, border-color .16s;cursor:default;
+  }
+  .chip:hover{transform:translateY(-2px);border-color:var(--teal)}
+  .chip.teal{border-color:rgba(31,163,123,.4);color:#7FE0BF}
+  .chip.violet{border-color:rgba(139,92,246,.4);color:#C4B0FA}
+  .chip small{color:var(--muted);font-size:10.5px;margin-left:7px}
+  .arrow{
+    text-align:center;font-family:var(--mono);font-size:13px;color:var(--line);
+    letter-spacing:.3em;
+  }
+
+  /* ---- work ---- */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{
+    border:1px solid var(--line);border-radius:14px;background:var(--surface);
+    padding:24px;display:flex;flex-direction:column;gap:12px;
+    transition:border-color .2s, transform .2s;
+  }
+  .card:hover{border-color:#33463D;transform:translateY(-3px)}
+  .card h3{font-family:var(--display);font-size:20px;font-weight:600;letter-spacing:-.01em}
+  .card p{font-size:14.5px;color:#A9B9B1}
+  .rule{height:2px;width:34px;border-radius:2px;background:var(--teal)}
+  .rule.v{background:var(--violet)}
+  .rule.n{background:#C9A227}
+  .tags{margin-top:auto;padding-top:8px;display:flex;gap:7px;flex-wrap:wrap}
+  .tag{font-family:var(--mono);font-size:10.5px;color:var(--muted);border:1px solid var(--line);padding:4px 8px;border-radius:5px}
+
+  /* ---- pub packages ---- */
+  .pkg{display:flex;justify-content:space-between;align-items:center;gap:20px;
+    padding:20px 0;border-bottom:1px solid var(--line)}
+  .pkg:last-child{border-bottom:none}
+  .pkg-l{font-family:var(--mono);font-size:15px;color:var(--bone)}
+  .pkg-l span{display:block;font-family:var(--body);font-size:13.5px;color:var(--muted);margin-top:4px}
+  .ver{font-family:var(--mono);font-size:11.5px;color:var(--teal);border:1px solid rgba(31,163,123,.35);
+    padding:4px 9px;border-radius:999px;white-space:nowrap}
+
+  /* ---- stack ---- */
+  .stack{display:flex;flex-wrap:wrap;gap:8px}
+  .st{font-family:var(--mono);font-size:12.5px;color:#A9B9B1;border:1px solid var(--line);
+    padding:7px 12px;border-radius:7px;background:var(--surface)}
+
+  /* ---- contact ---- */
+  .contact{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+  @media(max-width:760px){.contact{grid-template-columns:1fr}}
+  .cc{border:1px solid var(--line);border-radius:12px;padding:20px;background:var(--surface);
+    text-decoration:none;display:block;transition:border-color .18s}
+  .cc:hover{border-color:var(--teal)}
+  .cc span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+  .cc b{font-weight:500;font-size:15px;word-break:break-all}
+  footer{padding:36px 0 56px;color:var(--muted);font-family:var(--mono);font-size:12px;
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line)}
+  a:focus-visible,.chip:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:6px}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="wrap bar-in">
+    <div class="sig"><b>Prajjwal Ujjaini</b> — Flutter Web</div>
+    <nav class="nav">
+      <a href="#arch">architecture</a>
+      <a href="#work">work</a>
+      <a href="#pub">packages</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </div>
+</div>
+
+<header class="wrap hero">
+  <div>
+    <div class="eyebrow">Indore, India</div>
+    <h1>I build the apps —<br>and the packages<br>under them.
+      <span class="thin">Flutter Web engineer working on a multi-app event platform and the shared private kits that keep it consistent.</span>
+    </h1>
+    <p class="lede">Three products, one design system, five internal packages. Riverpod, Freezed, Beamer, Dio — and a strict rule about which layer is allowed to know what.</p>
+    <div class="cta-row">
+      <a class="btn btn-p" href="https://github.com/Prajjwal-Ujjaini">View GitHub</a>
+      <a class="btn" href="mailto:prajjwalujjaini@gmail.com">Email me</a>
+    </div>
+  </div>
+
+  <div class="spec" aria-label="pubspec.yaml describing Prajjwal">
+    <div class="spec-top">
+      <i class="dot a"></i><i class="dot"></i><i class="dot"></i>
+      <span class="spec-name">pubspec.yaml</span>
+    </div>
+    <div class="spec-body" id="spec"></div>
+  </div>
+</header>
+
+<section id="arch" class="wrap">
+  <div class="shead"><i class="snum">/ 01</i><h2>How it's layered</h2></div>
+  <p class="sdesc">One organisation, three Flutter Web apps, five shared packages. The rule that makes it hold: dependencies only ever point downward, and no package knows anything about a plan, a price, or a business rule.</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div class="layer-tag">Apps</div>
+      <div class="chips">
+        <div class="chip violet">amantranindia <small>consumer</small></div>
+        <div class="chip violet">organiser_app <small>#5F30BA</small></div>
+        <div class="chip teal">admin_app <small>#0F6E56</small></div>
+      </div>
+    </div>
+    <div class="arrow">↓ ↓ ↓</div>
+    <div class="layer">
+      <div class="layer-tag">Feature packages</div>
+      <div class="chips">
+        <div class="chip">auth_kit <small>phone-OTP, config-driven</small></div>
+        <div class="chip">invoice_kit</div>
+        <div class="chip">seat_kit</div>
+        <div class="chip">theme_kit <small>AppTokens</small></div>
+      </div>
+    </div>
+    <div class="arrow">↓ ↓ ↓</div>
+    <div class="layer">
+      <div class="layer-tag">Foundation — no Riverpod, no UI, no opinions</div>
+      <div class="chips">
+        <div class="chip teal">core_kit <small>ApiResult · Dio · storage · validators</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work" class="wrap">
+  <div class="shead"><i class="snum">/ 02</i><h2>What I'm building</h2></div>
+  <p class="sdesc">An event management ecosystem: guests receive invitations, organisers run their events, and an internal crew keeps the whole thing moving. Flutter Web front to back, Spring Boot behind it.</p>
+
+  <div class="grid">
+    <div class="card">
+      <i class="rule v"></i>
+      <h3>Amantran India</h3>
+      <p>The consumer-facing app: digital invitations, bookings, payments. Migrated the entire codebase from GetX to Riverpod without pausing feature work — including the full payment cluster.</p>
+      <div class="tags"><i class="tag">Riverpod 3</i><i class="tag">Freezed</i><i class="tag">Razorpay</i><i class="tag">Beamer</i></div>
+    </div>
+
+    <div class="card">
+      <i class="rule v"></i>
+      <h3>Organiser dashboard</h3>
+      <p>Where event organisers manage their listings, seating and invoices. Purple surface, self-signup, built on the same shared kits as everything else.</p>
+      <div class="tags"><i class="tag">Flutter Web</i><i class="tag">seat_kit</i><i class="tag">invoice_kit</i></div>
+    </div>
+
+    <div class="card">
+      <i class="rule"></i>
+      <h3>Ops console</h3>
+      <p>Internal crew tool — event approvals, payments, support tickets, crew management. Invite-only, phone-OTP, and a deliberately different teal so nobody confuses it with the organiser app.</p>
+      <div class="tags"><i class="tag">auth_kit</i><i class="tag">theme_kit</i><i class="tag">mock-first</i></div>
+    </div>
+
+    <div class="card">
+      <i class="rule n"></i>
+      <h3>The kits</h3>
+      <p>core_kit, theme_kit, auth_kit, invoice_kit, seat_kit. Dependency inversion at every seam: kits declare interfaces, apps inject the implementations. Semver'd, tagged, tested.</p>
+      <div class="tags"><i class="tag">polyrepo</i><i class="tag">semver</i><i class="tag">ThemeExtension</i></div>
+    </div>
+  </div>
+</section>
+
+<section id="pub" class="wrap">
+  <div class="shead"><i class="snum">/ 03</i><h2>On pub.dev</h2></div>
+  <p class="sdesc">Published packages, shipped to zero warnings on <code style="font-family:var(--mono);font-size:13px;color:var(--teal)">dart pub publish --dry-run</code>.</p>
+
+  <div class="pkg">
+    <div class="pkg-l">seat_kit <span>Seat map rendering and selection for venues and events.</span></div>
+    <i class="ver">v0.2.0</i>
+  </div>
+  <div class="pkg">
+    <div class="pkg-l">invoice_kit <span>Invoice models, tax handling and PDF-ready layouts.</span></div>
+    <i class="ver">v0.1.0</i>
+  </div>
+</section>
+
+<section id="stack" class="wrap">
+  <div class="shead"><i class="snum">/ 04</i><h2>Tools I reach for</h2></div>
+  <p class="sdesc">Chosen once, applied everywhere. Consistency across three apps is worth more than the perfect choice in any one of them.</p>
+  <div class="stack">
+    <i class="st">Flutter Web</i><i class="st">Dart</i><i class="st">Riverpod 3</i><i class="st">flutter_hooks</i>
+    <i class="st">Freezed</i><i class="st">Beamer</i><i class="st">Dio</i><i class="st">ThemeExtension</i>
+    <i class="st">Spring Boot APIs</i><i class="st">Razorpay</i><i class="st">GitHub Actions</i><i class="st">AWS</i>
+    <i class="st">Git / polyrepo</i><i class="st">Claude Code</i>
+  </div>
+</section>
+
+<section id="contact" class="wrap">
+  <div class="shead"><i class="snum">/ 05</i><h2>Get in touch</h2></div>
+  <p class="sdesc">Open to Flutter Web work, package design, and untangling apps that grew faster than their architecture.</p>
+  <div class="contact">
+    <a class="cc" href="mailto:prajjwalujjaini@gmail.com"><span>Email</span><b>prajjwalujjaini@gmail.com</b></a>
+    <a class="cc" href="tel:+917415968218"><span>Phone</span><b>+91 74159 68218</b></a>
+    <a class="cc" href="https://github.com/Prajjwal-Ujjaini"><span>GitHub</span><b>Prajjwal-Ujjaini</b></a>
+  </div>
+</section>
+
+<footer class="wrap">
+  <span>© 2026 Prajjwal Ujjaini</span>
+  <span>Built with Flutter on the brain, HTML on the page.</span>
+</footer>
+
+<script>
+const lines = [
+  '<span class="c"># a package that ships event platforms</span>',
+  '<span class="k">name</span>: <span class="v">prajjwal_ujjaini</span>',
+  '<span class="k">description</span>: <span class="v">Flutter Web engineer, Indore.</span>',
+  '<span class="k">version</span>: <span class="v">3.0.0</span>',
+  '',
+  '<span class="k">environment</span>:',
+  '  <span class="k">sdk</span>: <span class="v">\'>=2019 &lt;4.0.0\'</span>',
+  '',
+  '<span class="k">builds</span>:',
+  '  <span class="s">amantran_india</span>: <span class="v">consumer</span>',
+  '  <span class="s">organiser_app</span>:  <span class="v">dashboard</span>',
+  '  <span class="s">admin_app</span>:      <span class="v">ops console</span>',
+  '',
+  '<span class="k">maintains</span>:',
+  '  <span class="s">core_kit</span> <span class="s">theme_kit</span> <span class="s">auth_kit</span>',
+  '  <span class="s">invoice_kit</span> <span class="s">seat_kit</span>',
+  '',
+  '<span class="k">contact</span>: <span class="v">prajjwalujjaini@gmail.com</span>'
+];
+const spec = document.getElementById('spec');
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+lines.forEach((l, i) => {
+  const el = document.createElement('span');
+  el.className = 'ln';
+  el.innerHTML = l || '&nbsp;';
+  el.style.animationDelay = reduce ? '0s' : (0.16 + i * 0.055) + 's';
+  spec.appendChild(el);
+});
+</script>
+</body>
+</html>
